@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Node
+node_modules/
+.next/
+out/
+coverage/
+
+# Ambiente e dados locais
+.env
+*.db
+*.sqlite3
+backend/app.db
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Artefatos
+dist/
+build/
+*.xlsx
+!data/demo/*.xlsx
