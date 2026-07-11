@@ -14,10 +14,13 @@ Avaliações ponderadas, reputação com alertas, importados com custos detalhad
 Histórico de 6 meses com estatística por percentis, gráfico SVG, favoritos locais, Excel 4 abas.
 
 ## Fase 5 — Integrações reais ◐ (em andamento)
-- [x] Adaptador Mercado Livre via API pública (modo `public`)
+- [x] Adaptador VTEX genérico com resultados reais sem credencial (Novo Mundo ativo)
+- [x] Cotação de frete real por CEP nas lojas VTEX (simulação do checkout)
+- [x] Modos reais sem nenhum dado simulado (fontes sem credencial ficam inativas com o motivo)
+- [x] Adaptador Mercado Livre pronto (aguarda `MELI_ACCESS_TOKEN`; API exige aplicação registrada)
 - [x] Interface e configuração da Amazon PA-API
 - [ ] Chamada real assinada (SigV4) da PA-API com conta de associado aprovada
-- [ ] Cotação de frete real por CEP (APIs das lojas / Correios)
+- [ ] Magazine Luiza / Casas Bahia / Ponto Frio via programa de afiliados (exige cadastro aprovado)
 - [ ] Fonte de reputação real (parceria/termos do Reclame Aqui ou alternativa)
 
 ## Próximas melhorias

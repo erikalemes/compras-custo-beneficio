@@ -52,6 +52,19 @@ class Settings(BaseSettings):
     tolerance: float = DEFAULT_TOLERANCE
     demo_data_dir: Path = REPO_DIR / "data" / "demo"
 
+    # Lojas VTEX consultadas nos modos reais ("Nome:dominio;Nome2:dominio2").
+    vtex_stores: str = "Novo Mundo:www.novomundo.com.br"
+
+    @property
+    def vtex_store_list(self) -> list[tuple[str, str]]:
+        stores = []
+        for entry in self.vtex_stores.split(";"):
+            entry = entry.strip()
+            if ":" in entry:
+                name, domain = entry.split(":", 1)
+                stores.append((name.strip(), domain.strip()))
+        return stores
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

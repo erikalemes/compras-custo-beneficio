@@ -1,14 +1,11 @@
 """Adaptador da Amazon (secao 9 — fonte obrigatoria em toda pesquisa).
 
-Dois modos:
-
-1. **Simulado (padrao)** — usa o catalogo de demonstracao. Ativo sempre que as
-   credenciais da Product Advertising API (PA-API 5.0) nao estao configuradas.
-2. **Real (PA-API 5.0)** — exige AMAZON_PAAPI_ACCESS_KEY, AMAZON_PAAPI_SECRET_KEY
-   e AMAZON_PAAPI_PARTNER_TAG (conta aprovada no programa de associados).
-   A assinatura AWS SigV4 e as cotas da PA-API estao fora do alcance desta
-   versao; quando as credenciais existem, o adaptador registra a limitacao e
-   cai no modo simulado com aviso explicito, em vez de falhar a pesquisa.
+- **Modo demo**: usa o catalogo de demonstracao local, sempre marcado como
+  simulado.
+- **Modos reais (public/production)**: NUNCA serve dados simulados. A chamada
+  real exige a Product Advertising API 5.0 (conta de associado aprovada +
+  assinatura AWS SigV4, ainda nao certificada nesta versao). Sem isso a fonte
+  fica listada como indisponivel, com o motivo exibido ao usuario.
 
 O adaptador diferencia (via campo seller_type):
 - vendido_entregue_amazon
@@ -35,20 +32,28 @@ class AmazonAdapter(SourceAdapter):
 
     def __init__(self) -> None:
         s = get_settings()
+        self.demo_mode = s.app_mode == "demo"
         self.has_credentials = bool(
             s.amazon_paapi_access_key and s.amazon_paapi_secret_key and s.amazon_paapi_partner_tag
         )
-        self.simulated = not self.has_credentials or s.app_mode == "demo"
-        if not self.simulated:
-            # Credenciais presentes, mas a integracao PA-API real ainda nao foi
-            # certificada nesta versao. Documentado em docs/fontes-de-dados.md.
-            logger.warning(
-                "PA-API: credenciais detectadas, mas a chamada assinada (SigV4) ainda nao esta "
-                "implementada nesta versao. Usando catalogo simulado com aviso."
-            )
-            self.simulated = True
+        self.simulated = self.demo_mode
+        if not self.demo_mode:
+            if not self.has_credentials:
+                self.unavailable_reason = (
+                    "A Amazon exige credenciais oficiais da Product Advertising API "
+                    "(programa de associados). Fonte inativa até as credenciais serem configuradas."
+                )
+            else:
+                # Credenciais presentes, mas a chamada assinada (SigV4) ainda nao
+                # foi certificada nesta versao. Documentado em docs/fontes-de-dados.md.
+                self.unavailable_reason = (
+                    "Credenciais da PA-API detectadas, mas a integração assinada ainda não foi "
+                    "certificada nesta versão. Nenhum dado simulado é exibido em modo real."
+                )
 
     async def search(self, query: InterpretedQuery, cep: CepInfo) -> list[Offer]:
+        if not self.demo_mode:
+            return []  # modos reais nunca servem dados simulados
         offers = demo_offers_for_source(SOURCE_NAME)
         category_offers = [o for o in offers if o.category == query.category or query.category == "geral"]
         for o in category_offers:

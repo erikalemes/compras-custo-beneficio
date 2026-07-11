@@ -66,6 +66,11 @@ async def start_search(query: InterpretedQuery, cep: CepInfo) -> SearchResults:
 
 
 async def _query_source(adapter, query: InterpretedQuery, cep: CepInfo, status: SourceStatus) -> list[Offer]:
+    if adapter.unavailable_reason:
+        # Fonte real sem credencial: nao consultamos nem inventamos dados.
+        status.status = "erro"
+        status.message = adapter.unavailable_reason
+        return []
     status.status = "consultando"
     try:
         offers = await adapter.search(query, cep)

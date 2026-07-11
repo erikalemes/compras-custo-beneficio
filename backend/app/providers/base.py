@@ -15,6 +15,10 @@ class SourceAdapter(ABC):
     name: str = "fonte"
     kind: str = "demo"  # demo | api | feed
     simulated: bool = True
+    # Quando preenchido, a fonte NAO e consultada e o motivo e mostrado ao
+    # usuario (ex.: credencial ausente). Nos modos reais isso substitui o
+    # antigo fallback para dados simulados.
+    unavailable_reason: str = ""
 
     @abstractmethod
     async def search(self, query: InterpretedQuery, cep: CepInfo) -> list[Offer]:
@@ -23,4 +27,9 @@ class SourceAdapter(ABC):
         raise NotImplementedError
 
     def describe(self) -> dict:
-        return {"name": self.name, "kind": self.kind, "simulated": self.simulated}
+        return {
+            "name": self.name,
+            "kind": self.kind,
+            "simulated": self.simulated,
+            "unavailable_reason": self.unavailable_reason,
+        }

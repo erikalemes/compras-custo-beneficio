@@ -141,17 +141,19 @@ formatados, filtros, primeira linha congelada, formatação monetária e links c
 
 ## Modos e fontes de dados
 
-| Fonte | demo | public | production |
-| --- | --- | --- | --- |
-| Amazon Brasil | simulada | simulada | PA-API se houver credenciais (ver limitações) |
-| MegaLoja Brasil (fictícia) | ✔ | ✔ | ✔ |
-| ImportaDireto (fictícia) | ✔ | ✔ | ✔ |
-| Mercado Livre (API pública) | — | ✔ | ✔ |
+**Regra central:** nos modos reais (`public` e `production`) **nenhum dado simulado é exibido**.
+Fontes sem credencial aparecem como indisponíveis, com o motivo, em vez de mostrar dados fictícios.
 
-A interface indica o modo ativo e marca toda oferta simulada. O adaptador da Amazon deixa claro
-quando usa dados simulados; a chamada real da PA-API exige conta de associado aprovada e assinatura
-SigV4, ainda não certificada nesta versão (documentado em
-[docs/fontes-de-dados.md](docs/fontes-de-dados.md), que também ensina a **criar um novo adaptador**).
+| Fonte | demo | public/production |
+| --- | --- | --- |
+| Lojas VTEX (Novo Mundo; outras via `VTEX_STORES`) | — | ✔ real, sem credencial (busca + frete por CEP) |
+| Amazon Brasil | simulada (rotulada) | indisponível sem credenciais da PA-API (associado aprovado) |
+| Mercado Livre | — | indisponível sem `MELI_ACCESS_TOKEN` (exigido pela API desde 2024) |
+| Magazine Luiza, Casas Bahia, Ponto Frio | — | sem API pública; integráveis via programas de afiliados (conta necessária) |
+| MegaLoja / ImportaDireto (fictícias) | ✔ (rotuladas) | nunca |
+
+Detalhes e o guia para **criar um novo adaptador** em
+[docs/fontes-de-dados.md](docs/fontes-de-dados.md).
 
 ## Implantação
 

@@ -32,6 +32,15 @@ class MercadoLivreAdapter(SourceAdapter):
     kind = "api"
     simulated = False
 
+    def __init__(self) -> None:
+        if not get_settings().meli_access_token:
+            # Desde 2024 a API de busca do Mercado Livre exige aplicacao
+            # registrada. Sem token, a fonte fica inativa (sem dados falsos).
+            self.unavailable_reason = (
+                "O Mercado Livre passou a exigir credenciais de aplicação. "
+                "Configure MELI_ACCESS_TOKEN (developers.mercadolivre.com.br) para ativar esta fonte."
+            )
+
     async def search(self, query: InterpretedQuery, cep: CepInfo) -> list[Offer]:
         settings = get_settings()
         headers = {}

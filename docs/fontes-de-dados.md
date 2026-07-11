@@ -1,13 +1,21 @@
 # Fontes de dados e adaptadores
 
+## Política dos modos reais
+
+Nos modos `public` e `production` **nenhuma oferta simulada é exibida**. Fonte sem credencial fica
+listada como indisponível com o motivo (campo `unavailable_reason` do adaptador). O modo `demo`
+continua existindo apenas para demonstração offline, com tudo claramente rotulado.
+
 ## Fontes atuais
 
-| Adaptador | Arquivo | Tipo | Modo real? |
+| Adaptador | Arquivo | Tipo | Situação |
 | --- | --- | --- | --- |
-| Amazon Brasil | `providers/amazon.py` | API (PA-API 5.0) | Simulado. Detecta credenciais (`AMAZON_PAAPI_*`), mas a chamada assinada (AWS SigV4) e a aprovação no programa de associados ainda não foram certificadas; quando houver credenciais, registra a limitação e usa o catálogo simulado com aviso explícito. |
-| Mercado Livre | `providers/mercadolivre.py` | API pública | Real (modo `public`/`production`). Sem cotação de frete por CEP no endpoint público → ofertas entram como "não validadas para o CEP". |
-| MegaLoja Brasil | `providers/megaloja_demo.py` | demo | Fictícia, para demonstração. |
-| ImportaDireto | `providers/importadireto_demo.py` | demo | Fictícia, demonstra fluxo de importados. |
+| Lojas VTEX (Novo Mundo e outras via `VTEX_STORES`) | `providers/vtex.py` | API pública do storefront VTEX | **Real, sem credencial.** Busca (`/api/catalog_system/pub/products/search`) com termo literal → simplificado → termo da categoria (equivalentes), e frete real por CEP (`/api/checkout/pub/orderForms/simulation`). A loja não expõe avaliações/reputação: os campos ficam vazios/"não localizada" (nota neutra com aviso), nunca inventados. |
+| Amazon Brasil | `providers/amazon.py` | API (PA-API 5.0) | Demo: catálogo fictício rotulado. Modos reais: indisponível até haver credenciais de associado aprovadas + assinatura SigV4 certificada. |
+| Mercado Livre | `providers/mercadolivre.py` | API oficial | A API de busca passou a exigir aplicação registrada (403 sem token). Com `MELI_ACCESS_TOKEN` (crie em developers.mercadolivre.com.br) a fonte ativa. |
+| Magazine Luiza / Casas Bahia / Ponto Frio | — | sem API pública | Não expõem API aberta e os termos de uso não permitem coleta automatizada. Caminho oficial: programas de afiliados (ex.: Awin/Lomadee), que exigem cadastro aprovado; a arquitetura de adaptadores já comporta essa integração. |
+| MegaLoja Brasil | `providers/megaloja_demo.py` | demo | Fictícia, apenas modo demo. |
+| ImportaDireto | `providers/importadireto_demo.py` | demo | Fictícia, apenas modo demo (fluxo de importados). |
 
 O catálogo demo (`data/demo/products.json`) tem 18 ofertas em 6 categorias, com preços, avaliações
 e reputações **fictícios** e claramente identificados (`simulated: true`).

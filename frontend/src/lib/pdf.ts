@@ -92,7 +92,7 @@ export async function buildPdf(results: SearchResults): Promise<import("jspdf").
   });
 
   // Especificações tecnicas: linhas = caracteristicas, colunas = modelos
-  const specOffers = results.offers.slice(0, 6);
+  const specOffers = (results.offers.length ? results.offers : results.unvalidated_offers).slice(0, 6);
   if (specOffers.length > 0) {
     const keys = Array.from(new Set(specOffers.flatMap((r) => Object.keys(r.offer.specs)))).slice(0, 14);
     if (keys.length > 0) {
