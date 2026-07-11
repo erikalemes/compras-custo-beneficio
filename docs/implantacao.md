@@ -10,7 +10,11 @@ O modo demonstração roda inteiro em serviços gratuitos. Nenhum serviço pago 
 
 ## Backend — Render (ou Railway/Fly.io)
 
-**Render (Docker):**
+**Render (Blueprint, mais fácil):** New + → Blueprint → escolha o repositório. O arquivo
+`render.yaml` na raiz cria o serviço sozinho (Docker, plano free, modo demo). Depois de criar o
+frontend na Vercel, edite a variável `CORS_ORIGINS` no painel do Render para o endereço do frontend.
+
+**Render (manual):**
 1. New → Web Service → aponte para o repositório.
 2. Runtime: Docker · Dockerfile path: `backend/Dockerfile` · Docker build context: raiz do repo.
 3. Variáveis: `APP_MODE=demo` (ou `public`), `CORS_ORIGINS=https://seu-front.vercel.app`.

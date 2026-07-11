@@ -1,0 +1,19 @@
+# Blueprint do Render: cria o backend automaticamente ao importar o repositorio.
+# Em https://render.com : New + > Blueprint > escolher este repositorio.
+services:
+  - type: web
+    name: compras-custo-beneficio-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: APP_MODE
+        value: demo
+      - key: CORS_ORIGINS
+        # Depois de criar o frontend na Vercel, troque pelo endereco real
+        # (ex.: https://compras-custo-beneficio.vercel.app)
+        value: "*"
+      - key: MASK_CEP_IN_LOGS
+        value: "true"
