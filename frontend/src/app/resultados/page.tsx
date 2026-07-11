@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { downloadExport, getSearch } from "@/lib/api";
+import { exportPdf } from "@/lib/pdf";
 import { favorites, searches } from "@/lib/db";
 import { formatBRL } from "@/lib/format";
 import type { RankedOffer, SearchResults } from "@/lib/types";
@@ -182,13 +183,20 @@ function Resultados() {
             {result.cep.state}) · {result.offers.length} ofertas válidas
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
             className="btn-primary text-sm"
+            onClick={() => exportPdf(result).catch(() => undefined)}
+          >
+            Tabela comparativa (PDF)
+          </button>
+          <button
+            type="button"
+            className="btn-secondary text-sm"
             onClick={() => downloadExport(result).catch(() => undefined)}
           >
-            Exportar para Excel (.xlsx)
+            Exportar Excel (.xlsx)
           </button>
           <Link href="/" className="btn-secondary text-sm">
             Nova pesquisa

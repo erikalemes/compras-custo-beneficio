@@ -68,7 +68,7 @@ export function interpretRequestStatic(
   return { query: interpretStatic(text, maxPrice, allowImported), cep: cepInfo };
 }
 
-function runSearch(query: InterpretedQuery, cepInfo: CepInfo): SearchResults {
+export function runSearchStatic(query: InterpretedQuery, cepInfo: CepInfo): SearchResults {
   const all = catalogOffers().filter(
     (o) => o.category === query.category || query.category === "geral",
   );
@@ -172,7 +172,7 @@ function runSearch(query: InterpretedQuery, cepInfo: CepInfo): SearchResults {
 export function startSearchStatic(query: InterpretedQuery, cep: string): { search_id: string } {
   const cepInfo = lookupCepStatic(cep);
   if (!cepInfo.valid) throw new Error(`CEP inválido: ${cepInfo.message}`);
-  const result = runSearch(query, cepInfo);
+  const result = runSearchStatic(query, cepInfo);
   const searchId = Math.random().toString(36).slice(2, 14);
   result.search_id = searchId;
   sessionStorage.setItem(
