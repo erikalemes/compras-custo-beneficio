@@ -49,6 +49,18 @@ def test_preco_formato_brasileiro():
     assert q.max_price == 3500.0
 
 
+def test_max_de_nome_de_produto_nao_e_preco():
+    q = interpret("Iphone 17 pro max 256gb")
+    assert q.category == "celular"
+    assert q.max_price is None  # "pro max 256gb" nao pode virar preco maximo
+    assert _by_id(q, "armazenamento").value == 256
+
+
+def test_ate_com_unidade_nao_e_preco():
+    q = interpret("geladeira de ate 450 litros")
+    assert q.max_price is None
+
+
 def test_categoria_desconhecida():
     q = interpret("furadeira de impacto 700W")
     assert q.category == "geral"

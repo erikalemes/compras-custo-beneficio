@@ -81,7 +81,13 @@ def interpret(text: str, max_price: float | None = None, allow_imported: bool = 
     )
 
     # --- preco maximo --------------------------------------------------------
-    m = re.search(rf"(?:ate|maximo|no maximo|max\.?)\s*(?:de\s*)?(?:r\$\s*)?{_NUM}", folded)
+    # Exige palavra de limite explicita ("ate", "no maximo", "maximo de", "max.")
+    # e rejeita numeros seguidos de unidade fisica ("max 256gb" nao e preco).
+    m = re.search(
+        rf"(?:ate|no maximo|maximo de|max\.)\s*(?:de\s*)?(?:r\$\s*)?{_NUM}"
+        r"(?!\d)(?!\s*(?:gb|tb|mb|litros?|l\b|btus?|polegadas|pol\b|kg|quilos|v\b|volts|mah|mp\b))",
+        folded,
+    )
     price_limit = max_price
     if m and price_limit is None:
         price_limit = _to_float(m.group(1))
