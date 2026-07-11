@@ -61,6 +61,11 @@ def _crit(id_: str, label: str, field: str, op: str, value, unit: str, kind: Cri
     return Criterion(id=id_, label=label, field=field, operator=op, value=value, unit=unit, kind=kind)
 
 
+def _brl(value: float) -> str:
+    """Formata em padrao brasileiro: 5000.5 -> 'R$ 5.000,50'."""
+    return "R$ " + f"{value:,.2f}".replace(",", "\x00").replace(".", ",").replace("\x00", ".")
+
+
 def interpret(text: str, max_price: float | None = None, allow_imported: bool = True) -> InterpretedQuery:
     settings = get_settings()
     folded = _fold(text)
@@ -82,7 +87,7 @@ def interpret(text: str, max_price: float | None = None, allow_imported: bool = 
         price_limit = _to_float(m.group(1))
     if price_limit is not None:
         criteria.append(
-            _crit("preco_max", f"Preço máximo R$ {price_limit:,.2f}", "total_delivered", "lte",
+            _crit("preco_max", f"Preço máximo {_brl(price_limit)}", "total_delivered", "lte",
                   price_limit, "R$", CriterionKind.OBRIGATORIO)
         )
 

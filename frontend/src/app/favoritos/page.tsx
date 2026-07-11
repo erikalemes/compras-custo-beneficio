@@ -35,7 +35,7 @@ export default function FavoritosPage() {
 
   async function searchAgain(entry: SearchHistoryEntry) {
     sessionStorage.setItem("ccb:prefill", JSON.stringify({ text: entry.text, cep: entry.cep }));
-    router.push(`/?texto=${encodeURIComponent(entry.text)}`);
+    router.push("/");
   }
 
   return (

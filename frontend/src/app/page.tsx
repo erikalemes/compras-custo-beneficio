@@ -25,11 +25,22 @@ export default function HomePage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const prefill = sessionStorage.getItem("ccb:prefill");
+    if (prefill) {
+      sessionStorage.removeItem("ccb:prefill");
+      try {
+        const { text: t, cep: c } = JSON.parse(prefill) as { text: string; cep: string };
+        if (t) setText(t);
+        if (c) setCep(c);
+      } catch {
+        /* prefill invalido: ignora */
+      }
+    }
     settings
       .get("cep")
       .then((saved) => {
         if (typeof saved === "string" && saved) {
-          setCep(saved);
+          setCep((current) => current || saved);
           setSaveCep(true);
         }
       })

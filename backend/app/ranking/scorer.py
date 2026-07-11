@@ -145,6 +145,12 @@ def build_alerts(ranked: RankedOffer) -> None:
             "Esta empresa apresenta preço competitivo, mas possui reputação "
             f"{_REPUTATION_LABEL[rep]} e histórico de reclamações. Compre com cautela."
         )
+    seller_rep = offer.seller_reputation.classification
+    if seller_rep in ("ruim", "critica") and rep not in ("ruim", "critica"):
+        alerts.append(
+            f"O vendedor {offer.seller_name or 'do marketplace'} possui reputação "
+            f"{_REPUTATION_LABEL[seller_rep]} e elevado índice de reclamações não solucionadas."
+        )
     if rep == "nao_localizada":
         alerts.append(
             "Não foi localizada reputação suficiente. A avaliação foi baseada em outras evidências disponíveis."
