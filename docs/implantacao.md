@@ -2,6 +2,16 @@
 
 O modo demonstração roda inteiro em serviços gratuitos. Nenhum serviço pago é exigido.
 
+## GitHub Pages — demonstração estática (já no ar)
+
+**https://erikalemes.github.io/compras-custo-beneficio/**
+
+O workflow `.github/workflows/pages.yml` compila o frontend com `NEXT_PUBLIC_STATIC_DEMO=true`
+(Next.js `output: export`) e publica em Pages a cada push na main. Nesse modo toda a "API" roda no
+navegador (`frontend/src/lib/demo/`): interpretação, CEP offline, ranking, histórico determinístico
+e Excel via exceljs. Serve para usar e compartilhar a demonstração; o histórico não persiste entre
+pesquisas e as fontes são o catálogo fictício. Para dados reais, use as opções abaixo.
+
 ## Frontend — Vercel
 
 1. Importe o repositório na Vercel e defina **Root Directory = `frontend`**.

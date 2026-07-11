@@ -66,7 +66,7 @@ jobs:
       - name: Build da imagem do backend
         run: docker build -f backend/Dockerfile -t ccb-backend .
       - name: Build da imagem do frontend
-        run: docker build -t ccb-frontend ./frontend
+        run: docker build -f frontend/Dockerfile -t ccb-frontend .
       - name: Smoke test do backend
         run: |
           docker run -d --name api -p 8000:8000 -e APP_MODE=demo ccb-backend

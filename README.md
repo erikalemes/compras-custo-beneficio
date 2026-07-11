@@ -1,7 +1,14 @@
 # Compras Custo-Benefício
 
+**Demonstração online (celular e computador):** https://erikalemes.github.io/compras-custo-beneficio/
+
 Aplicação web **pública, aberta e sem cadastro** para pesquisar produtos vendidos pela internet e
 indicar o **melhor custo-benefício** — não apenas o menor preço — de forma transparente e justificável.
+
+> A demonstração no GitHub Pages roda 100% no navegador (modo demo, dados fictícios): interpretação,
+> ranking, histórico e Excel são calculados localmente, sem backend. A versão completa (backend
+> FastAPI, fontes reais e histórico persistente) roda via Docker ou nos serviços descritos em
+> [docs/implantacao.md](docs/implantacao.md).
 
 Você descreve o produto em linguagem natural ("Geladeira frost free, aproximadamente 450 litros,
 220 V, nova, até R$ 5.000"), informa seu CEP e a aplicação:
