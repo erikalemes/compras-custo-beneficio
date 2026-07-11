@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { exportUrl, getSearch } from "@/lib/api";
+import { downloadExport, getSearch } from "@/lib/api";
 import { favorites, searches } from "@/lib/db";
 import { formatBRL } from "@/lib/format";
 import type { RankedOffer, SearchResults } from "@/lib/types";
@@ -183,9 +183,13 @@ function Resultados() {
           </p>
         </div>
         <div className="flex gap-2">
-          <a href={exportUrl(result.search_id)} className="btn-primary text-sm" download>
+          <button
+            type="button"
+            className="btn-primary text-sm"
+            onClick={() => downloadExport(result).catch(() => undefined)}
+          >
             Exportar para Excel (.xlsx)
-          </a>
+          </button>
           <Link href="/" className="btn-secondary text-sm">
             Nova pesquisa
           </Link>
